@@ -3,7 +3,12 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 DATA_DIR = ROOT / "data"
-DIST_DIR = ROOT / "dist"
+DOCS_DIR = ROOT / "docs"
+
+GITHUB_OWNER = "bamboomeat"
+GITHUB_REPO = "book-catalog"
+GITHUB_BRANCH = "main"
+PROGRESS_PATH = "data/progress.json"
 
 with open(DATA_DIR / "books.json", encoding="utf-8") as f:
     rows = json.load(f)
@@ -31,6 +36,8 @@ html = f"""<title>書籍分析カタログ</title>
   --accent-ink: #1D453F;
   --chip-bg: #E4E0D0;
   --done-bg: #EAF1DA;
+  --err-bg: #F3D9D2;
+  --err-ink: #8A2E1E;
   --shadow: 0 1px 2px rgba(42,42,34,0.06), 0 4px 16px rgba(42,42,34,0.05);
   --radius: 10px;
   --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Hiragino Mincho ProN", serif;
@@ -51,6 +58,8 @@ html = f"""<title>書籍分析カタログ</title>
     --accent-ink: #A6E4D6;
     --chip-bg: #2C2D22;
     --done-bg: #26301F;
+    --err-bg: #4A2620;
+    --err-ink: #F0B6A6;
     --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
   }}
 }}
@@ -67,6 +76,8 @@ html = f"""<title>書籍分析カタログ</title>
   --accent-ink: #A6E4D6;
   --chip-bg: #2C2D22;
   --done-bg: #26301F;
+  --err-bg: #4A2620;
+  --err-ink: #F0B6A6;
   --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
 }}
 
@@ -87,7 +98,7 @@ body {{
   padding: 44px 28px 80px;
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 20px;
 }}
 
 header.page {{
@@ -162,6 +173,93 @@ h1 {{
 .stats b {{
   color: var(--ink);
   font-size: 15px;
+}}
+
+.sync-row {{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}}
+.sync-badge {{
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--chip-bg);
+  color: var(--ink-soft);
+  white-space: nowrap;
+}}
+.sync-badge.ok {{ background: var(--done-bg); color: var(--accent-ink); }}
+.sync-badge.err {{ background: var(--err-bg); color: var(--err-ink); }}
+
+.banner {{
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  font-size: 13px;
+}}
+.banner .actions {{ display: flex; gap: 8px; flex-wrap: wrap; }}
+.banner .btn {{ background: var(--surface); }}
+
+.modal-overlay {{
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 20px;
+}}
+.modal-overlay.open {{ display: flex; }}
+.modal {{
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  max-width: 440px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}}
+.modal h2 {{
+  font-family: var(--font-serif);
+  font-size: 18px;
+  margin: 0;
+  color: var(--ink);
+}}
+.modal p {{
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  margin: 0;
+}}
+.modal input[type="password"] {{
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--ink);
+  width: 100%;
+}}
+.modal-actions {{
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
 }}
 
 .controls {{
@@ -342,6 +440,7 @@ tbody tr.row-done:hover {{ background: var(--done-bg); filter: brightness(0.97);
   accent-color: var(--accent);
   cursor: pointer;
 }}
+.done-check:disabled {{ cursor: not-allowed; opacity: 0.5; }}
 .blogdate-cell input[type="date"] {{
   width: 100%;
   background: var(--surface);
@@ -401,7 +500,19 @@ mark {{
       <span><b id="stat-count">283</b> 件表示中</span>
       <span><b id="stat-cats">20</b> 分類</span>
     </div>
+    <div class="sync-row">
+      <span class="sync-badge" id="sync-badge">同期状態を確認中…</span>
+      <button class="btn" id="btn-settings">⚙ GitHub連携設定</button>
+    </div>
   </header>
+
+  <div class="banner" id="migration-banner">
+    <span>この端末に保存済みの進捗データが見つかりました。GitHubに反映しますか？</span>
+    <div class="actions">
+      <button class="btn" id="btn-migrate">GitHubに反映する</button>
+      <button class="btn" id="btn-migrate-dismiss">今は使わない</button>
+    </div>
+  </div>
 
   <div class="controls">
     <div class="search-row">
@@ -450,33 +561,158 @@ mark {{
 
   <footer class="note">
     Obsidian vault「Helloworld / 01_Inbox / BookSummary」内の {len(rows)} 件のノートから自動集計<br />
-    ブログ作成の進捗はこのブラウザ内（localStorage）に保存されます。他の端末・ブラウザとは同期されないため、定期的に「進捗をエクスポート」でバックアップしてください。
+    ブログ作成の進捗は GitHub リポジトリ（{GITHUB_OWNER}/{GITHUB_REPO}）の {PROGRESS_PATH} に保存されます。⚙で書き込み権限のあるトークンを設定した端末からは、どこからでも更新できます。閲覧のみなら設定不要です。
   </footer>
+</div>
+
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <h2>GitHub連携設定</h2>
+    <p>
+      進捗の更新をどの端末からでもGitHubに反映するには、書き込み権限を持つ Personal Access Token（Fine-grained、対象リポジトリ: {GITHUB_OWNER}/{GITHUB_REPO}、Repository permissions → Contents: Read and write）が必要です。
+      トークンはこのブラウザの localStorage にのみ保存され、GitHub 以外には送信されません。閲覧だけなら設定不要です。
+    </p>
+    <input type="password" id="token-input" placeholder="github_pat_..." autocomplete="off" />
+    <p id="token-status"></p>
+    <div class="modal-actions">
+      <button class="btn" id="btn-token-clear">トークンを削除</button>
+      <button class="btn" id="btn-token-save">保存</button>
+      <button class="btn" id="btn-modal-close">閉じる</button>
+    </div>
+  </div>
 </div>
 
 <script>
 const BOOKS = {books_json};
 const CATS = {cats_json};
-const STORAGE_KEY = "bookCatalogProgress_v1";
 
-function loadProgress() {{
-  try {{
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{{}}");
-  }} catch (e) {{
-    return {{}};
-  }}
-}}
-function saveProgress() {{
-  try {{
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
-  }} catch (e) {{ /* storage unavailable — state stays in-memory for this session */ }}
-}}
+const GITHUB_OWNER = "{GITHUB_OWNER}";
+const GITHUB_REPO = "{GITHUB_REPO}";
+const GITHUB_BRANCH = "{GITHUB_BRANCH}";
+const PROGRESS_PATH = "{PROGRESS_PATH}";
+const TOKEN_KEY = "bookCatalogGithubToken_v1";
+const LEGACY_PROGRESS_KEY = "bookCatalogProgress_v1";
+const CACHE_KEY = "bookCatalogProgressCache_v2";
+
 function todayStr() {{
   return new Date().toISOString().slice(0, 10);
 }}
 
-let progress = loadProgress();
+function getToken() {{ return localStorage.getItem(TOKEN_KEY) || ""; }}
+function setToken(t) {{
+  if (t) localStorage.setItem(TOKEN_KEY, t);
+  else localStorage.removeItem(TOKEN_KEY);
+}}
+
+function b64EncodeUtf8(str) {{ return btoa(unescape(encodeURIComponent(str))); }}
+function b64DecodeUtf8(str) {{ return decodeURIComponent(escape(atob(str))); }}
+
+function readLegacyProgress() {{
+  try {{ return JSON.parse(localStorage.getItem(LEGACY_PROGRESS_KEY) || "null"); }}
+  catch (e) {{ return null; }}
+}}
+function readCache() {{
+  try {{ return JSON.parse(localStorage.getItem(CACHE_KEY) || "null"); }}
+  catch (e) {{ return null; }}
+}}
+function cacheLocally(p) {{
+  try {{ localStorage.setItem(CACHE_KEY, JSON.stringify(p)); }} catch (e) {{ /* storage unavailable */ }}
+}}
+
+let progress = {{}};
+let progressSha = null;
+let canEdit = !!getToken();
 let state = {{ query: "", cat: null, status: null, sort: "title" }};
+
+function ghHeaders() {{
+  const h = {{ "Accept": "application/vnd.github+json" }};
+  const t = getToken();
+  if (t) h["Authorization"] = "Bearer " + t;
+  return h;
+}}
+
+async function fetchRemoteProgress() {{
+  const url = `https://api.github.com/repos/${{GITHUB_OWNER}}/${{GITHUB_REPO}}/contents/${{PROGRESS_PATH}}?ref=${{GITHUB_BRANCH}}`;
+  const res = await fetch(url, {{ headers: ghHeaders() }});
+  if (res.status === 404) {{ progressSha = null; return {{}}; }}
+  if (!res.ok) throw new Error("status " + res.status);
+  const data = await res.json();
+  progressSha = data.sha;
+  try {{ return JSON.parse(b64DecodeUtf8(data.content.replace(/\\n/g, ""))); }}
+  catch (e) {{ return {{}}; }}
+}}
+
+async function putRemoteProgress(next) {{
+  const url = `https://api.github.com/repos/${{GITHUB_OWNER}}/${{GITHUB_REPO}}/contents/${{PROGRESS_PATH}}`;
+  const body = {{
+    message: "Update reading progress",
+    content: b64EncodeUtf8(JSON.stringify(next, null, 2)),
+    branch: GITHUB_BRANCH,
+  }};
+  if (progressSha) body.sha = progressSha;
+  const res = await fetch(url, {{
+    method: "PUT",
+    headers: Object.assign({{ "Content-Type": "application/json" }}, ghHeaders()),
+    body: JSON.stringify(body),
+  }});
+  return res;
+}}
+
+async function pushRemoteProgress(next) {{
+  if (!getToken()) throw new Error("no-token");
+  let res = await putRemoteProgress(next);
+  if (res.status === 409) {{
+    const remote = await fetchRemoteProgress();
+    next = Object.assign({{}}, remote, next);
+    res = await putRemoteProgress(next);
+  }}
+  if (!res.ok) throw new Error("status " + res.status);
+  const data = await res.json();
+  progressSha = data.content.sha;
+  return next;
+}}
+
+let saveTimer = null;
+let saveInFlight = false;
+let saveQueued = false;
+
+function scheduleSave() {{
+  clearTimeout(saveTimer);
+  updateSyncBadge("pending");
+  saveTimer = setTimeout(runSave, 900);
+}}
+
+async function runSave() {{
+  if (!getToken()) {{ updateSyncBadge("no-token"); return; }}
+  if (saveInFlight) {{ saveQueued = true; return; }}
+  saveInFlight = true;
+  updateSyncBadge("syncing");
+  try {{
+    const snapshot = Object.assign({{}}, progress);
+    const saved = await pushRemoteProgress(snapshot);
+    progress = saved;
+    cacheLocally(progress);
+    updateSyncBadge("ok");
+  }} catch (e) {{
+    updateSyncBadge("error", e.message);
+  }} finally {{
+    saveInFlight = false;
+    if (saveQueued) {{ saveQueued = false; runSave(); }}
+  }}
+}}
+
+function updateSyncBadge(kind, detail) {{
+  const el = document.getElementById("sync-badge");
+  el.classList.remove("ok", "err");
+  const hhmm = new Date().toTimeString().slice(0, 5);
+  if (kind === "checking") el.textContent = "GitHub同期を確認中…";
+  else if (kind === "no-token") el.textContent = "⚠ GitHub未接続（⚙で設定すると更新できます）";
+  else if (kind === "pending") el.textContent = "変更あり・同期待ち…";
+  else if (kind === "syncing") el.textContent = "同期中…";
+  else if (kind === "ok") {{ el.textContent = `✓ 同期済み ${{hhmm}}`; el.classList.add("ok"); }}
+  else if (kind === "error") {{ el.textContent = "✗ 同期エラー" + (detail ? `（${{detail}}）` : ""); el.classList.add("err"); }}
+  else if (kind === "cache") {{ el.textContent = "⚠ オフライン表示中（前回取得分のキャッシュ）"; el.classList.add("err"); }}
+}}
 
 const chipsEl = document.getElementById("chips");
 const statusChipsEl = document.getElementById("status-chips");
@@ -600,14 +836,15 @@ function renderTable() {{
       <td class="col-date date-cell">${{escapeHtml(b.date)}}</td>
       <td class="col-cat cat-cell"><span class="tag">${{escapeHtml(b.category)}}</span></td>
       <td class="col-summary summary-cell">${{highlight(b.summary, q)}}</td>
-      <td class="col-done done-cell"><input type="checkbox" class="done-check" data-id="${{b.id}}" ${{isDone ? "checked" : ""}} /></td>
-      <td class="col-blogdate blogdate-cell"><input type="date" class="done-date" data-id="${{b.id}}" value="${{escapeHtml(dateVal)}}" ${{isDone ? "" : "disabled"}} /></td>
+      <td class="col-done done-cell"><input type="checkbox" class="done-check" data-id="${{b.id}}" ${{isDone ? "checked" : ""}} ${{canEdit ? "" : "disabled"}} /></td>
+      <td class="col-blogdate blogdate-cell"><input type="date" class="done-date" data-id="${{b.id}}" value="${{escapeHtml(dateVal)}}" ${{(isDone && canEdit) ? "" : "disabled"}} /></td>
     </tr>
   `;
   }}).join("");
 }}
 
 tbody.addEventListener("change", (e) => {{
+  if (!canEdit) return;
   const id = e.target.getAttribute("data-id");
   if (id === null) return;
   const rec = progress[id] ? Object.assign({{}}, progress[id]) : {{}};
@@ -615,14 +852,16 @@ tbody.addEventListener("change", (e) => {{
     rec.done = e.target.checked;
     if (rec.done && !rec.date) rec.date = todayStr();
     progress[id] = rec;
-    saveProgress();
+    cacheLocally(progress);
     renderStatusChips();
     renderTable();
+    scheduleSave();
   }} else if (e.target.classList.contains("done-date")) {{
     rec.date = e.target.value;
     progress[id] = rec;
-    saveProgress();
+    cacheLocally(progress);
     updateProgressBar();
+    scheduleSave();
   }}
 }});
 
@@ -634,39 +873,18 @@ function showStatus(msg, ms) {{
   if (ms) setTimeout(() => {{ if (statusMsgEl.textContent === msg) statusMsgEl.textContent = ""; }}, ms);
 }}
 
-let downloadsApi = null;
-(async () => {{
-  try {{
-    downloadsApi = (typeof claude !== "undefined" && claude.use) ? await claude.use("downloads") : null;
-  }} catch (e) {{
-    downloadsApi = null;
-  }}
-  if (!downloadsApi) {{
-    document.getElementById("btn-export").disabled = true;
-    document.getElementById("btn-export").title = "この環境ではエクスポート機能が利用できません";
-  }}
-}})();
-
-document.getElementById("btn-export").addEventListener("click", async () => {{
-  if (!downloadsApi) return;
-  const payload = {{
-    exportedAt: new Date().toISOString(),
-    totalBooks: BOOKS.length,
-    progress: progress,
-  }};
-  try {{
-    await downloadsApi.save({{
-      filename: `book_catalog_progress_${{todayStr()}}.json`,
-      data: JSON.stringify(payload, null, 2),
-    }});
-    showStatus("エクスポートしました", 3000);
-  }} catch (err) {{
-    if (err && err.code === "declined") {{
-      showStatus("保存がキャンセルされました", 3000);
-    }} else {{
-      showStatus("エクスポートに失敗しました", 3000);
-    }}
-  }}
+document.getElementById("btn-export").addEventListener("click", () => {{
+  const payload = {{ exportedAt: new Date().toISOString(), totalBooks: BOOKS.length, progress: progress }};
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {{ type: "application/json" }});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `book_catalog_progress_${{todayStr()}}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+  showStatus("エクスポートしました", 3000);
 }});
 
 document.getElementById("btn-import-trigger").addEventListener("click", () => {{
@@ -681,10 +899,15 @@ document.getElementById("import-file").addEventListener("change", (e) => {{
       const parsed = JSON.parse(reader.result);
       const incoming = (parsed && typeof parsed === "object" && parsed.progress) ? parsed.progress : parsed;
       progress = Object.assign({{}}, progress, incoming);
-      saveProgress();
+      cacheLocally(progress);
       renderStatusChips();
       renderTable();
-      showStatus("進捗を読み込みました", 3000);
+      if (canEdit) {{
+        scheduleSave();
+        showStatus("進捗を読み込み、GitHubへの反映をスケジュールしました", 3500);
+      }} else {{
+        showStatus("進捗を読み込みました（GitHub未接続のため反映は保存されません）", 4500);
+      }}
     }} catch (err) {{
       showStatus("読み込みに失敗しました（JSON形式を確認してください）", 4000);
     }}
@@ -693,15 +916,97 @@ document.getElementById("import-file").addEventListener("change", (e) => {{
   e.target.value = "";
 }});
 
-document.getElementById("stat-cats").textContent = CATS.length;
-renderChips();
-renderStatusChips();
-renderTable();
+const modalOverlay = document.getElementById("modal-overlay");
+const tokenInput = document.getElementById("token-input");
+const tokenStatus = document.getElementById("token-status");
+
+function refreshTokenStatus() {{
+  tokenStatus.textContent = getToken() ? "現在: 設定済み" : "現在: 未設定";
+}}
+document.getElementById("btn-settings").addEventListener("click", () => {{
+  tokenInput.value = "";
+  refreshTokenStatus();
+  modalOverlay.classList.add("open");
+}});
+document.getElementById("btn-modal-close").addEventListener("click", () => {{
+  modalOverlay.classList.remove("open");
+}});
+modalOverlay.addEventListener("click", (e) => {{
+  if (e.target === modalOverlay) modalOverlay.classList.remove("open");
+}});
+document.getElementById("btn-token-save").addEventListener("click", () => {{
+  const v = tokenInput.value.trim();
+  if (!v) {{ showStatus("トークンを入力してください", 3000); return; }}
+  setToken(v);
+  canEdit = true;
+  refreshTokenStatus();
+  updateSyncBadge("ok");
+  renderTable();
+  showStatus("トークンを保存しました", 3000);
+}});
+document.getElementById("btn-token-clear").addEventListener("click", () => {{
+  setToken("");
+  canEdit = false;
+  refreshTokenStatus();
+  updateSyncBadge("no-token");
+  renderTable();
+  showStatus("トークンを削除しました", 3000);
+}});
+
+function maybeShowMigrationBanner() {{
+  const legacy = readLegacyProgress();
+  if (!legacy) return;
+  const legacyDoneCount = Object.values(legacy).filter(r => r && r.done).length;
+  const remoteDoneCount = Object.values(progress).filter(r => r && r.done).length;
+  if (legacyDoneCount > 0 && legacyDoneCount > remoteDoneCount) {{
+    document.getElementById("migration-banner").style.display = "flex";
+  }}
+}}
+document.getElementById("btn-migrate").addEventListener("click", () => {{
+  const legacy = readLegacyProgress() || {{}};
+  progress = Object.assign({{}}, progress, legacy);
+  cacheLocally(progress);
+  document.getElementById("migration-banner").style.display = "none";
+  renderStatusChips();
+  renderTable();
+  if (canEdit) {{
+    scheduleSave();
+  }} else {{
+    showStatus("先に⚙でGitHubトークンを設定すると反映されます", 4500);
+  }}
+}});
+document.getElementById("btn-migrate-dismiss").addEventListener("click", () => {{
+  document.getElementById("migration-banner").style.display = "none";
+}});
+
+async function init() {{
+  const cached = readCache();
+  if (cached) progress = cached;
+  document.getElementById("stat-cats").textContent = CATS.length;
+  renderChips();
+  renderStatusChips();
+  renderTable();
+  updateSyncBadge("checking");
+  try {{
+    const remote = await fetchRemoteProgress();
+    progress = remote;
+    cacheLocally(progress);
+    updateSyncBadge(canEdit ? "ok" : "no-token");
+    renderStatusChips();
+    renderTable();
+    maybeShowMigrationBanner();
+  }} catch (e) {{
+    if (cached) updateSyncBadge("cache");
+    else updateSyncBadge("error", "取得失敗");
+  }}
+}}
+
+init();
 </script>
 """
 
-DIST_DIR.mkdir(exist_ok=True)
-out_path = DIST_DIR / "book_catalog.html"
+DOCS_DIR.mkdir(exist_ok=True)
+out_path = DOCS_DIR / "index.html"
 with open(out_path, "w", encoding="utf-8") as f:
     f.write(html)
 
