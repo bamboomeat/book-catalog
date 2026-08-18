@@ -21,7 +21,12 @@ cat_list = sorted(cats.items(), key=lambda x: -x[1])
 books_json = json.dumps(rows, ensure_ascii=False)
 cats_json = json.dumps(cat_list, ensure_ascii=False)
 
-html = f"""<title>書籍分析カタログ</title>
+html = f"""<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>書籍分析カタログ</title>
 <style>
 :root {{
   --bg: #EEECE3;
@@ -400,13 +405,13 @@ tbody tr:last-child td {{ border-bottom: none; }}
 tbody tr:hover {{ background: var(--surface-alt); }}
 tbody tr.row-done {{ background: var(--done-bg); }}
 tbody tr.row-done:hover {{ background: var(--done-bg); filter: brightness(0.97); }}
-.col-title {{ width: 17%; }}
-.col-author {{ width: 12%; }}
-.col-date {{ width: 1%; white-space: nowrap; }}
-.col-cat {{ width: 10%; }}
-.col-summary {{ width: 40%; }}
-.col-done {{ width: 8%; text-align: center; }}
-.col-blogdate {{ width: 12%; }}
+.col-title {{ width: 18%; }}
+.col-author {{ width: 11%; }}
+.col-date {{ width: 7%; }}
+.col-cat {{ width: 9%; }}
+.col-summary {{ width: 41%; }}
+.col-done {{ width: 6%; text-align: center; }}
+.col-blogdate {{ width: 8%; }}
 
 .title-cell {{
   font-family: var(--font-serif);
@@ -420,7 +425,6 @@ tbody tr.row-done:hover {{ background: var(--done-bg); filter: brightness(0.97);
   font-variant-numeric: tabular-nums;
   font-size: 12.5px;
   color: var(--ink-soft);
-  white-space: nowrap;
 }}
 .cat-cell .tag {{
   display: inline-block;
@@ -486,6 +490,8 @@ mark {{
   table {{ min-width: 900px; }}
 }}
 </style>
+</head>
+<body>
 
 <div class="wrap">
   <header class="page">
@@ -1003,6 +1009,8 @@ async function init() {{
 
 init();
 </script>
+</body>
+</html>
 """
 
 DOCS_DIR.mkdir(exist_ok=True)
