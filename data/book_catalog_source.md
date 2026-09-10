@@ -283,3 +283,11 @@
 | 経済学 下巻 | 宇野弘蔵（編著）・大島清・玉野井芳郎・大内力 | 2019年5月24日（底本1956年） | 経済 | マルクス経済学の三段階論に基づき、日本資本主義の後進性と財閥支配、国家独占資本主義への転化を分析する宇野弘蔵編著の経済学書。 |
 | 経済学上巻 | 宇野弘蔵（編著）・大島清・玉野井芳郎・大内力 | 2019年5月24日（底本1956年） | 経済 | 資本主義は労働力の商品化という歴史的特殊性の上に成立するとし、原理論・段階論・現状分析の三層構造で解明する宇野経済学の入門書。 |
 | 自省録 | マルクス・アウレーリウス（訳：神谷美恵子） | 2013年4月25日（電子版）／1956年（文庫初版） | 哲学 | 内なる理性を純粋に保つことのみが真の自由と幸福をもたらすと説く、ローマ皇帝マルクス・アウレリウスが自らに語りかけた哲学的省察録。 |
+| A History of the Ottoman Empire（オスマン帝国史） | Douglas A. Howard（ダグラス・A・ハワード） | 2017年 | 歴史 | オスマン帝国を王朝・財政モデル・喪失の感受性という三層からなる世界観の形成と崩壊の過程として描く通史。 |
+| The Ottoman Empire: The Classical Age 1300–1600（オスマン帝国 古典時代） | Halil Inalcik（ハリル・イナルジク） | 1973年（電子版2013年） | 歴史 | オスマン帝国を古代近東国家の統治伝統の最高到達点と捉え、その完成度ゆえの近代への不適応を制度的に解剖する。 |
+| The Rise and Fall of American Growth: The U.S. Standard of Living since the Civil War | Robert J. Gordon（ロバート・J・ゴードン） | 2016年（執筆完了2015年8月） | 経済 | 1870〜1970年の「特別な世紀」の大発明は一度限りのものであり、以後の成長減速は構造的必然だと論じる経済史。 |
+| New Cold Wars: China's Rise, Russia's Invasion, and America's Struggle to Defend the West | David E. Sanger（デイヴィッド・E・サンガー）／Mary K. Brooks | 2024年4月16日 | 政治・国際関係 | 経済的相互依存が大国の野心に勝つという米国の賭けの敗北を、中露との二重の冷戦として一次取材で描くルポ。 |
+| Inheritance: The Evolutionary Origins of the Modern World | Harvey Whitehouse（ハーヴェイ・ホワイトハウス） | 2024年 | 科学 | 同調・宗教性・部族主義という三つの進化的バイアスが文明を築き、いま人類を危機へ導いていると論じる人類学。 |
+| Deliberate Calm: How to Learn and Lead in a Volatile World | Jacqueline Brassey／Aaron De Smet／Michiel Kruyt（McKinsey & Company） | 2022年11月 | 組織論・リーダーシップ | 適応が最も必要な局面ほど脳が学習を拒むという逆説を、二重の気づきの訓練で解く実践的リーダーシップ論。 |
+| Ways of Seeing（イメージ ―― 視覚とメディア） | John Berger（ジョン・バージャー） | 1972年（2008年再刊） | 哲学 | 見ることは財産と支配の歴史が形づくった制度であり、油彩画の伝統と広告は同じ「所有する眼差し」だと暴く。 |
+| The Welch Way: 24 Lessons from the World's Greatest CEO | Jeffrey A. Krames（ジェフリー・A・クレイムズ） | 2002年 | 組織論・リーダーシップ | ウェルチのGE変革を、官僚主義の破壊と知性の解放を軸に一般社員が実行できる24の行動原則へ翻訳した実践書。 |
