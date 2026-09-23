@@ -291,3 +291,12 @@
 | Deliberate Calm: How to Learn and Lead in a Volatile World | Jacqueline Brassey／Aaron De Smet／Michiel Kruyt（McKinsey & Company） | 2022年11月 | 組織論・リーダーシップ | 適応が最も必要な局面ほど脳が学習を拒むという逆説を、二重の気づきの訓練で解く実践的リーダーシップ論。 |
 | Ways of Seeing（イメージ ―― 視覚とメディア） | John Berger（ジョン・バージャー） | 1972年（2008年再刊） | 哲学 | 見ることは財産と支配の歴史が形づくった制度であり、油彩画の伝統と広告は同じ「所有する眼差し」だと暴く。 |
 | The Welch Way: 24 Lessons from the World's Greatest CEO | Jeffrey A. Krames（ジェフリー・A・クレイムズ） | 2002年 | 組織論・リーダーシップ | ウェルチのGE変革を、官僚主義の破壊と知性の解放を軸に一般社員が実行できる24の行動原則へ翻訳した実践書。 |
+| Four Thousand Weeks: Time and How to Use It | Oliver Burkeman（オリバー・バークマン） | 2021年 | 自己啓発 | 人生は約4000週しかなく時間は制御できないという有限性の受容こそが、最良の時間管理だと説く実存的時間論。 |
+| How to Lead: Wisdom from the World's Greatest CEOs, Founders, and Game Changers | David M. Rubenstein（デヴィッド・M・ルーベンシュタイン） | 2020年9月 | 組織論・リーダーシップ | 30人の傑出したリーダーへの一次インタビューから、情熱・失敗からの学習・謙虚さという共通原則と6類型を抽出する。 |
+| The Journey of Leadership: How CEOs Learn to Lead from the Inside Out | Dana Maor／Hans-Werner Kaas／Kurt Strovink／Ramesh Srinivasan（McKinsey & Company） | 2024年 | 組織論・リーダーシップ | CEO最大のブレーキは成功体験による自己の条件づけだとし、まず自分を率いてから組織へ波及させる内発的リーダー論。 |
+| The New CEO: Lessons from CEOs on How to Start Well and Perform Quickly (Minus the Common Mistakes) | Ty Wiggins（タイ・ウィギンズ） | 2024年5月 | 組織論・リーダーシップ | CEOは別種の仕事であり、就任後12〜18カ月の移行期は能力ではなく自己マネジメントで成否が決まると示す実践ガイド。 |
+| The Titanium Economy: How Industrial Technology Can Create a Better, Faster, Stronger America | Asutosh Padhi／Gaurav Batra／Nick Santhanam | 2022年10月 | ビジネス・経営 | 見過ごされてきた米国の産業テック企業群こそ成長・雇用・脱炭素を担う本命だと論じ、投資と政策の集中を訴える。 |
+| 安倍晋三──平成・令和の光と闇（中公新書 2913） | 服部龍二 | 2026年6月 | 伝記 | 外交・安保の構想力と、官邸への権力集中が招いた内政の歪みを不可分の両面として描く実証的な評伝。 |
+| 帝国の構造──中心・周辺・亜周辺（岩波現代文庫） | 柄谷行人 | 2023年11月（原本2014年） | 哲学 | 交換様式論から国家と帝国を捉え直し、帝国の原理を高次元で回復する「世界共和国」への道を構想する国家論。 |
+| 日米密約史──核、朝鮮有事、沖縄をめぐる裏交渉（中公新書 2904） | 信夫隆司 | 2026年4月 | 政治・国際関係 | 核・朝鮮有事・沖縄をめぐる四つの密約を一次史料で実証し、その根を日米安保体制の非対称性に見出す外交史。 |
+| Introduction to Industrial Organization (Second Edition)（産業組織論入門） | Luís Cabral（ルイス・カブラル） | 2017年（第2版） | 経済 | 完全競争の前提がどこで破れるかを地図として産業組織論を通覧し、市場支配力の源泉と政策の損得を条件依存で説く入門書。 |
